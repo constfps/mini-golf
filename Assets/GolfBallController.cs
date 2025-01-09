@@ -51,16 +51,34 @@ public class GolfBallController : MonoBehaviour
 
     private void StartAiming()
     {
-        
+        currentPower = 0f;
+        lineRenderer.enabled = true;
+        startShotPos = Input.mousePosition;
     }
 
     private void Aim()
     {
+        Vector3 mouseScreePosition = Input.mousePosition;
+        float distance = Vector3.Distance(startShotPos, mouseScreePosition);
+        currentPower = Mathf.Clamp(distance * screenWorldConversionFactor * maxPower, 0f, maxPower);
 
+        Vector3 screenDirection = mouseScreePosition - startShotPos;
+        shotDirection = new Vector3(screenDirection.x, 0f, screenDirection.y);
+        shotDirection = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up) * shotDirection;
+
+        shotDirection.Normalize();
+
+        lineRenderer.SetPosition(0, transform.position);
+        lineRenderer.SetPosition(1, transform.position + shotDirection * currentPower * 0.2f);
     }
 
     private void Shoot()
     {
+        rb.AddForce(-shotDirection * currentPower, ForceMode.Impulse);
+        isStopped = false;
+        currentPower = 0f;
+        lineRenderer.enabled = false;
 
+        shotsTaken++;
     }
 }
