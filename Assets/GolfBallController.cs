@@ -6,6 +6,7 @@ public class GolfBallController : MonoBehaviour
     private float screenWorldConversionFactor = 0.002f;
     private float velocityThreshold = 1f;
     private float currentPower;
+    private float lastShotPower;
 
     public LineRenderer lineRenderer;
     public Rigidbody rb;
@@ -13,6 +14,7 @@ public class GolfBallController : MonoBehaviour
 
     public Vector3 startShotPos;
     public Vector3 shotDirection;
+    private Vector3 lastFrameVelocity;
 
     public int shotsTaken = 0;
 
@@ -47,6 +49,8 @@ public class GolfBallController : MonoBehaviour
         {
             Shoot();
         }
+
+        lastFrameVelocity = rb.velocity;
     }
 
     private void StartAiming()
@@ -74,11 +78,36 @@ public class GolfBallController : MonoBehaviour
 
     private void Shoot()
     {
+        lastShotPower = currentPower;
         rb.AddForce(-shotDirection * currentPower, ForceMode.Impulse);
         isStopped = false;
         currentPower = 0f;
         lineRenderer.enabled = false;
 
         shotsTaken++;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Wall"))
+        {
+            Bounce(collision.contacts[0].normal);
+        }
+    }
+
+    private void Bounce(Vector3 collisionNormal)
+    {
+        float speed = lastFrameVelocity.magnitude;
+        Vector3 direction = Vector3.Reflect(lastFrameVelocity.normalized, collisionNormal);
+
+        if (speed > 0f)
+        {
+            rb.velocity = direction * speed * 0.95f;
+        }
+        else
+        {
+            direction = Vector3.Reflect(-shotDirection.normalized, collisionNormal);
+            rb.AddForce(direction * lastShotPower, ForceMode.Impulse);
+        }
     }
 }
