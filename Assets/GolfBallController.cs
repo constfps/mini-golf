@@ -11,6 +11,7 @@ public class GolfBallController : MonoBehaviour
     public LineRenderer lineRenderer;
     public Rigidbody rb;
     public bool isStopped = true;
+    private bool isAimming = false;
 
     public Vector3 startShotPos;
     public Vector3 shotDirection;
@@ -40,12 +41,12 @@ public class GolfBallController : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButton(0) && isStopped)
+        if (Input.GetMouseButton(0) && isAimming)
         {
             Aim();
         }
 
-        if (Input.GetMouseButtonUp(0) && isStopped)
+        if (Input.GetMouseButtonUp(0) && isAimming)
         {
             Shoot();
         }
@@ -58,6 +59,7 @@ public class GolfBallController : MonoBehaviour
         currentPower = 0f;
         lineRenderer.enabled = true;
         startShotPos = Input.mousePosition;
+        isAimming = true;
     }
 
     private void Aim()
@@ -81,6 +83,7 @@ public class GolfBallController : MonoBehaviour
         lastShotPower = currentPower;
         rb.AddForce(-shotDirection * currentPower, ForceMode.Impulse);
         isStopped = false;
+        isAimming = false;
         currentPower = 0f;
         lineRenderer.enabled = false;
 
