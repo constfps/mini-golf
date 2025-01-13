@@ -12,6 +12,10 @@ public class CameraController : MonoBehaviour
     private float damping = 5f;
     private float yaw;
 
+    private float pitch = 30f;
+    private float minPitch = 20f;
+    private float maxPitch = 90f;
+
     public Transform player;
     public Transform pivot;
     public Transform focalPoint;
@@ -32,14 +36,18 @@ public class CameraController : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             float mouseX = Input.GetAxis("Mouse X") * sensitivity;
+            float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
 
             yaw += mouseX;
-            transform.eulerAngles = new Vector3(40f, yaw, 0f);
+            pitch += mouseY;
+            pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+
+            transform.eulerAngles = new Vector3(pitch, yaw, 0f);
             pivot.eulerAngles = new Vector3(0f, yaw, 0f);
             transform.position = focalPoint.position - transform.forward * distance;
         }
 
-        transform.eulerAngles = new Vector3(40f, yaw, 0f);
+        transform.eulerAngles = new Vector3(pitch, yaw, 0f);
         pivot.eulerAngles = new Vector3(0f, yaw, 0f);
         targetPosition = focalPoint.position - transform.forward * distance;
     }
