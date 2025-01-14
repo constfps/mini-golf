@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b229328f802b44cae9c84b942fff9e, type: 3}
   m_Name: Grass Settings
   m_EditorClassIdentifier: 
-  shaderToUse: {fileID: 0}
-  materialToUse: {fileID: 0}
+  shaderToUse: {fileID: 7200000, guid: cb6d63fb097cace4d8efc8e4ca7b9a18, type: 3}
+  materialToUse: {fileID: 2100000, guid: d021689dd49150745958888c62b8ac53, type: 2}
   grassRandomHeightMin: 0
-  grassRandomHeightMax: 0
-  bladeRadius: 0.2
-  bladeForwardAmount: 0.38
+  grassRandomHeightMax: 0.24
+  bladeRadius: 0.051
+  bladeForwardAmount: 0.115
   bladeCurveAmount: 2
   bottomWidth: 0.1
   MinWidth: 0.01
   MinHeight: 0.01
   MaxWidth: 1
-  MaxHeight: 1
+  MaxHeight: 0.571
   windSpeed: 10
   windStrength: 0.05
   allowedBladesPerVertex: 4
