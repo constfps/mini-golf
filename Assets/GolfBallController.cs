@@ -7,6 +7,7 @@ public class GolfBallController : MonoBehaviour
     private float velocityThreshold = 1f;
     private float currentPower;
     private float lastShotPower;
+    public float hazardPosY;
 
     public LineRenderer lineRenderer;
     public Rigidbody rb;
@@ -16,6 +17,7 @@ public class GolfBallController : MonoBehaviour
     public Vector3 startShotPos;
     public Vector3 shotDirection;
     private Vector3 lastFrameVelocity;
+    private Vector3 lastShotPos;
 
     public int shotsTaken = 0;
 
@@ -26,7 +28,7 @@ public class GolfBallController : MonoBehaviour
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             isStopped = true;
-        }
+        } else isStopped = false;
 
         if (Input.GetMouseButtonDown(0) && isStopped)
         {
@@ -52,6 +54,11 @@ public class GolfBallController : MonoBehaviour
         }
 
         lastFrameVelocity = rb.velocity;
+
+        if (transform.position.y < hazardPosY)
+        {
+            HazardReset();
+        }
     }
 
     private void StartAiming()
@@ -80,6 +87,7 @@ public class GolfBallController : MonoBehaviour
 
     private void Shoot()
     {
+        lastShotPos = transform.position;
         lastShotPower = currentPower;
         rb.AddForce(-shotDirection * currentPower, ForceMode.Impulse);
         isStopped = false;
@@ -95,6 +103,13 @@ public class GolfBallController : MonoBehaviour
         if (collision.collider.CompareTag("Wall"))
         {
             Bounce(collision.contacts[0].normal);
+        }
+
+        if (collision.collider.CompareTag("Hole"))
+        {
+            rb.velocity = Vector3.zero;
+            //win func
+            Debug.Log("won detected");
         }
     }
 
@@ -112,5 +127,11 @@ public class GolfBallController : MonoBehaviour
             direction = Vector3.Reflect(-shotDirection.normalized, collisionNormal);
             rb.AddForce(direction * lastShotPower, ForceMode.Impulse);
         }
+    }
+
+    private void HazardReset()
+    {
+        rb.velocity = Vector3.zero;
+        transform.position = lastShotPos;
     }
 }
