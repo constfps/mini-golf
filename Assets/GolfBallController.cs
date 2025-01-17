@@ -21,6 +21,8 @@ public class GolfBallController : MonoBehaviour
 
     public int shotsTaken = 0;
 
+    public GameManager gameManager;
+
     private void Update()
     {
         if (Mathf.Abs(rb.velocity.y) < 0.0001f && rb.velocity.magnitude < velocityThreshold)
@@ -96,6 +98,7 @@ public class GolfBallController : MonoBehaviour
         lineRenderer.enabled = false;
 
         shotsTaken++;
+        gameManager.UpdateScore();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -108,8 +111,7 @@ public class GolfBallController : MonoBehaviour
         if (collision.collider.CompareTag("Hole"))
         {
             rb.velocity = Vector3.zero;
-            //win func
-            Debug.Log("won detected");
+            gameManager.WinHole(shotsTaken);
         }
     }
 
