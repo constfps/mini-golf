@@ -103,10 +103,7 @@ public class GolfBallController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Wall"))
-        {
-            Bounce(collision.contacts[0].normal);
-        }
+        Bounce(collision.contacts[0].normal);
 
         if (collision.collider.CompareTag("Hole"))
         {
