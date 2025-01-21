@@ -110,6 +110,10 @@ public class GolfBallController : MonoBehaviour
             rb.velocity = Vector3.zero;
             gameManager.WinHole(shotsTaken);
         }
+        else if (collision.collider.CompareTag("Rotor"))
+        {
+            rb.AddForce((transform.position - collision.collider.transform.position) * 5000f, ForceMode.Impulse);
+        }
     }
 
     private void Bounce(Vector3 collisionNormal)

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Wall
   - Hole
+  - Rotor
   layers:
   - Default
   - TransparentFX
